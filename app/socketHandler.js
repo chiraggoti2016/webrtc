@@ -45,7 +45,7 @@ module.exports = function(io, streams, list) {
     });
 
     function leave() {
-      console.log('-- ' + client.id + ' left --');
+      console.log('-- ' + client.id + ' left end --');
       streams.removeStream(client.id);
 
 
@@ -72,7 +72,12 @@ module.exports = function(io, streams, list) {
     }
 
     client.on('end', leave);
-    client.on('disconnect', ()=>{});
-    client.on('leave', ()=>{});
+    client.on('disconnect', ()=>{
+      console.log('-- disconnect --');
+    });
+    client.on('leave', ()=>{
+
+      console.log('-- leave --');
+    });
   });
 };
