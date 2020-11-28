@@ -131,7 +131,7 @@
 			if(localStream.cameraIsOn){
 				camera.stop()
 				.then(function(result){
-					client.send('leave');
+					client.send('end');
 	    			client.setLocalStream(null);
 				})
 				.catch(function(err) {

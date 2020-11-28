@@ -48,17 +48,21 @@ module.exports = function(io, streams, list) {
       console.log('-- ' + client.id + ' left end --');
       streams.removeStream(client.id);
 
-
       rItem = list.getClient(client.id);
+    
       newItem = null;
       if(rItem && rItem.status == list.status.ACTIVE) {        
-        newItem=list.getFirstReadyClient();
-        if(newItem != undefined) {
-          list.setActive(rItem.ref, newItem.id);
-          list.setActive(newItem.id, rItem.ref);
-        } else {
-          list.setReady(rItem.ref);
-        }
+        // newItem=list.getFirstReadyClient();
+        // console.log(newItem);
+        // if(newItem != undefined) {
+        //   list.setActive(rItem.ref, newItem.id);
+        //   list.setActive(newItem.id, rItem.ref);
+        // } else {
+        //   list.setReady(rItem.ref);
+        // }
+        
+        list.setInit(rItem.ref);
+
         if(rItem.ref != null) {
           var otherClient = io.sockets.connected[rItem.ref];
           if(otherClient) {
@@ -67,16 +71,19 @@ module.exports = function(io, streams, list) {
         }
       }
 
-      // list.removeClient(client.id);
-      list.setInit(client.id);
+      list.removeClient(client.id);
+      // list.setInit(client.id);
     }
 
     client.on('end', leave);
     client.on('disconnect', ()=>{
+    
       console.log('-- disconnect --');
+      leave();
+    list.removeClient(client.id);
     });
     client.on('leave', ()=>{
-
+      leave();
       console.log('-- leave --');
     });
   });
